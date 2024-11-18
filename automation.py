@@ -76,12 +76,13 @@ def maximize_sharpe_ratio(cleaned_df):
     def negative_sharpe(weights):
         # Ensure weights is a numpy array
         weights = np.array(weights)
+        # print("weights has shape ", weights.shape)
 
         # Portfolio return
         portfolio_return = np.dot(weights, avg_returns)
 
         # Portfolio volatility
-        portfolio_volatility = np.sqrt(np.dot(np.transpose(weights), np.dot(cov_matrix, weights))) + 0.0001
+        portfolio_volatility = np.sqrt(np.dot(weights, np.dot(cov_matrix, np.transpose(weights)))) + 0.0001 # transpose shouldn't matter 
  
         # Sharpe Ratio
         sharpe_ratio = portfolio_return / portfolio_volatility # hits 0.0 at some point
@@ -93,22 +94,9 @@ def maximize_sharpe_ratio(cleaned_df):
         if obj_value < best_obj_value:
             best_obj_value = obj_value
             best_weights = weights.copy()
-
-    # def smooth_abs_approx(x, delta = 0.001):
-    #     return np.sqrt(x**2 + delta)
-
-    # def constraint_func(x):
-    #     f = np.vectorize(smooth_abs_approx)
-    #     return sum(f(x)) - 1
-    
-    # def constraint_func_alt(x):
-    #     return sum(np.abs(x)) - 1
-    
-    # def constraint_jacobian(x, delta = 0.0001):
-    #     return x / smooth_abs_approx(x, delta) # done on paper needed because better than numerical approximation + sqrt derivative is funky
-
+            
     # Constraints: Weights sum to 1
-    constraints = [{'type': 'eq', 'fun': lambda x: sum(np.abs(x)) - 1}] # non differentiable at x = 0 so cant use SLSQP method
+    constraints = [{'type': 'eq', 'fun': lambda x: sum(x) - 1}] # non differentiable at x = 0 so cant use SLSQP method
 
     # constraints = [
     #     {'type': 'ineq', 'fun': lambda w: np.sum(np.abs(w)) - 1},
@@ -117,7 +105,7 @@ def maximize_sharpe_ratio(cleaned_df):
 
     bounds = [(-0.1, 0.1) for _ in range(num_assets)] 
 
-    initial_weights = np.random.uniform(-0.1, 0.1, num_assets)
+    initial_weights = ([1/num_assets] * num_assets)
     # initial_weights = np.array([1] + [0] * (num_assets - 1))
 
     # Minimize the negative Sharpe ratio
