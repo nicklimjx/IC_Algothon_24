@@ -51,4 +51,5 @@ taskkill /F /IM chrome.exe /T
 - Used a better optimisation function rather than scipy.optimize.minimize for constraint reasons (SLSQP method needs a differentiable function but $\sum{|x|}$ is not)
 - Distributed work better (different levels of experience meant that the work was pretty unevenly distributed)
 - Analysed the dataset faster at the start and immediately hopped onto momentum/trend strats because they were CTAs
+- Finished a better PnL tracker
 - Slept more
