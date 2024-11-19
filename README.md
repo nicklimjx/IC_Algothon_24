@@ -1,5 +1,8 @@
 # IC_Algothon_24
 
+Sharpe unscaled by realised risk: 0.8383423486031025
+Sharpe scaled by realised risk: 0.8162832368110791	
+
 ## Description
 Run data through our pipeline which has a form of momentum mechanism and determines weights using Markowitz mean-variance optimisation, optimising for 
 
